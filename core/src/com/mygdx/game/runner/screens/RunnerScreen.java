@@ -17,6 +17,8 @@ public class RunnerScreen extends GameScreen {
 
     boolean isPressed = false;
     long jumpTime = 0;
+
+    float time = 0;
     Texture Player;
     SpriteBatch batch;
     Camera camera;
@@ -36,7 +38,7 @@ public class RunnerScreen extends GameScreen {
 
         // Viewport size the same as the background texture
         camera = new OrthographicCamera(1920, 1080);
-        Gdx.graphics.setWindowedMode(720*2, 480*2);
+        Gdx.graphics.setWindowedMode(1920, 1080);
 
         // Art assets from
         // https://opengameart.org/content/parallax-2d-backgrounds
@@ -62,40 +64,42 @@ public class RunnerScreen extends GameScreen {
     }
 
     @Override
-    public void render(float v) {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        int speed = 50;
-        //if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.position.x -= speed * Gdx.graphics.getDeltaTime();
+    public void render(float delta) {
+        time += delta;
 
-        //Camera Default Movement
-        camera.position.x += speed * Gdx.graphics.getDeltaTime();
-        //if (Gdx.input.isKeyPressed(Input.Keys.UP)) camera.position.y -= speed * Gdx.graphics.getDeltaTime();
-        //if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.position.y += speed * Gdx.graphics.getDeltaTime();
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        for (ParallaxLayer layer : layers) {
-            layer.render(batch);
-        }
-        batch.end();
+        if (time > 0.1) {
+            Gdx.gl.glClearColor(1, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            int speed = 50;
+            //if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.position.x -= speed * Gdx.graphics.getDeltaTime();
 
-        System.out.println("time:" + jumpTime);
-
-        if (!isPressed) {
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                isPressed = true;
-                camera.position.y -=10;
-                jumpTime = TimeUtils.nanoTime();
+            //Camera Default Movement
+            camera.position.x += speed * Gdx.graphics.getDeltaTime();
+            //if (Gdx.input.isKeyPressed(Input.Keys.UP)) camera.position.y -= speed * Gdx.graphics.getDeltaTime();
+            //if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.position.y += speed * Gdx.graphics.getDeltaTime();
+            camera.update();
+            batch.setProjectionMatrix(camera.combined);
+            batch.begin();
+            for (ParallaxLayer layer : layers) {
+                layer.render(batch);
             }
-        }
-        else {
+            batch.end();
+
+
+            if (!isPressed) {
+                if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                    isPressed = true;
+                    camera.position.y -= 10;
+                    jumpTime = TimeUtils.nanoTime();
+                }
+            } else {
                 if ((TimeUtils.nanoTime() - jumpTime) > 1000000000) {
                     System.out.println("Time:" + jumpTime);
-                    camera.position.y +=10;
+                    camera.position.y += 10;
                     jumpTime = 0;
                     isPressed = false;
                 }
+            }
         }
     }
     @Override

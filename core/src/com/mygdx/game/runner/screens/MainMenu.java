@@ -18,13 +18,13 @@ public class MainMenu extends GameScreen {
     SpriteBatch batch;
     Camera camera;
     float time = 0;
-
-    TextureAtlas atlas;
+    private static final float FRAME_TIME = 1/3f;
+    private Animation<TextureRegion> cactus;
     ParallaxLayer[] parallaxLayers;
 
     public MainMenu (Game game) {
         super(game);
-        this.resize(720, 480);
+        this.resize(1920, 1080);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class MainMenu extends GameScreen {
 
         // Viewport size the same as the background texture
         camera = new OrthographicCamera(1920, 1080);
-        Gdx.graphics.setWindowedMode(720*2, 480*2);
+        Gdx.graphics.setWindowedMode(1920, 1080);
 
         // Art assets from
         // https://opengameart.org/content/parallax-2d-backgrounds
@@ -48,6 +48,11 @@ public class MainMenu extends GameScreen {
         parallaxLayers[7] = new ParallaxLayer(new Texture("parrallaxEffect/04.png"), 0f, true, false);
         parallaxLayers[8] = new ParallaxLayer(new Texture("parrallaxEffect/03.png"), 0f, true, false);
         parallaxLayers[9] = new ParallaxLayer(new Texture("parrallaxEffect/02.png"), 0f, true, false);
+
+        TextureAtlas cactusRegions = new TextureAtlas(Gdx.files.internal("cactusPacked/cactus.atlas"));
+        cactus = new Animation<>(FRAME_TIME, cactusRegions.findRegions("cactus"));
+        cactus.setFrameDuration(FRAME_TIME);
+
         parallaxLayers[10] = new ParallaxLayer(new Texture("parrallaxEffect/01.png"),0f, true, false);
 
         // Could be part of the constructor but this is a bit more flexible (can create the parallax layers before
@@ -63,16 +68,18 @@ public class MainMenu extends GameScreen {
 
         if (time > 0.1) {
             Gdx.gl.glClearColor(1, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);;
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            TextureRegion currentFrame = cactus.getKeyFrame(time, true);
             camera.update();
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
             for (ParallaxLayer layer : parallaxLayers) {
                 layer.render(batch);
             }
+            batch.draw(currentFrame, -600, -350, currentFrame.getRegionWidth() * 2, currentFrame.getRegionHeight() * 2);
+            batch.draw(currentFrame, 200, -300, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
+            batch.draw(currentFrame, 600, -300, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
             batch.end();
-
-            time += delta;
 
             if (Gdx.input.isKeyPressed(Keys.ENTER) || Gdx.input.justTouched()) {
                 game.setScreen(new RunnerScreen(game));
