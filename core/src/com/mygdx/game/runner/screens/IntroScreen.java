@@ -19,8 +19,8 @@ public class IntroScreen extends GameScreen {
 
     @Override
     public void show () {
-        intro = new TextureRegion(new Texture(Gdx.files.internal("data/IntroScreen.png")), 0, 0, 300, 300);
         batch = new SpriteBatch();
+        intro = new TextureRegion(new Texture(Gdx.files.internal("data/IntroScreen.png")), 0, 0, 300, 300);
         batch.getProjectionMatrix().setToOrtho2D(0, 0, 300, 300);
     }
 
