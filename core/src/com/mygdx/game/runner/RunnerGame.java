@@ -13,6 +13,7 @@ public class RunnerGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		//hallo till
+		//hallo eneas
 		img = new Texture("badlogic.jpg");
 	}
 
