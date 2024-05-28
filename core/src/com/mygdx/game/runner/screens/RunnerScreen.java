@@ -11,15 +11,20 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.runner.ParallaxLayer;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class RunnerScreen extends GameScreen {
 
+    boolean isPressed = false;
+    long jumpTime = 0;
+    Texture Player;
     SpriteBatch batch;
     Camera camera;
 
     Game game;
 
     ParallaxLayer[] layers;
+
 
     public RunnerScreen(Game game){
         super(game);
@@ -53,6 +58,7 @@ public class RunnerScreen extends GameScreen {
         for (ParallaxLayer layer : layers) {
             layer.setCamera(camera);
         }
+        Player = new Texture(Gdx.files.internal("data/Background.png"));
     }
 
     @Override
@@ -73,8 +79,25 @@ public class RunnerScreen extends GameScreen {
             layer.render(batch);
         }
         batch.end();
-    }
 
+        System.out.println("time:" + jumpTime);
+
+        if (!isPressed) {
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                isPressed = true;
+                camera.position.y -=10;
+                jumpTime = TimeUtils.nanoTime();
+            }
+        }
+        else {
+                if ((TimeUtils.nanoTime() - jumpTime) > 1000000000) {
+                    System.out.println("Time:" + jumpTime);
+                    camera.position.y +=10;
+                    jumpTime = 0;
+                    isPressed = false;
+                }
+        }
+    }
     @Override
     public void dispose() {
         batch.dispose();
