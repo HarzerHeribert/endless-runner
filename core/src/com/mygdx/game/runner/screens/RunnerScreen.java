@@ -25,7 +25,6 @@ public class RunnerScreen extends GameScreen {
     Texture Player;
     SpriteBatch batch;
     Camera camera;
-
     private static final float FRAME_TIME_RUN = 1/8f;
     private Animation<TextureRegion> run;
 
@@ -97,7 +96,8 @@ public class RunnerScreen extends GameScreen {
             for (ParallaxLayer layer : layers) {
                 layer.render(batch);
             }
-            batch.draw(currentFrame, -100, -350, currentFrame.getRegionWidth() * 2, currentFrame.getRegionHeight() * 2);
+
+            batch.draw(currentFrame, camera.position.x -600, -200, currentFrame.getRegionWidth() * 4, currentFrame.getRegionHeight() * 4);
 
             batch.end();
 
