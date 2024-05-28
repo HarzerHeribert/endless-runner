@@ -1,5 +1,6 @@
 package com.mygdx.game.runner;
 
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.mygdx.game.runner.RunnerGame;
@@ -10,6 +11,6 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("endless-runnner");
-		new Lwjgl3Application(new RunnerGame(), config);
+		new Lwjgl3Application(new ScreenLauncher(), config);
 	}
 }

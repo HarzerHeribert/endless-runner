@@ -12,9 +12,6 @@ public class RunnerGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		//hallo till
-		//hallo eneas
-		//hallo joshi
 		img = new Texture("badlogic.jpg");
 	}
 
