@@ -9,7 +9,10 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.runner.ParallaxLayer;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -22,6 +25,9 @@ public class RunnerScreen extends GameScreen {
     Texture Player;
     SpriteBatch batch;
     Camera camera;
+
+    private static final float FRAME_TIME_RUN = 1/8f;
+    private Animation<TextureRegion> run;
 
     Game game;
 
@@ -53,6 +59,11 @@ public class RunnerScreen extends GameScreen {
         layers[7] = new ParallaxLayer(new Texture("parrallaxEffect/04.png"), 2.8f, true, false);
         layers[8] = new ParallaxLayer(new Texture("parrallaxEffect/03.png"), 3.5f, true, false);
         layers[9] = new ParallaxLayer(new Texture("parrallaxEffect/02.png"), 4.0f, true, false);
+
+        TextureAtlas runRegions = new TextureAtlas(Gdx.files.internal("adventurer/run/run.atlas"));
+        run = new Animation<>(FRAME_TIME_RUN, runRegions.findRegions("run"));
+        run.setFrameDuration(FRAME_TIME_RUN);
+
         layers[10] = new ParallaxLayer(new Texture("parrallaxEffect/01.png"), 20.0f, true, false);
 
         // Could be part of the constructor but this is a bit more flexible (can create the parallax layers before
@@ -70,7 +81,10 @@ public class RunnerScreen extends GameScreen {
         if (time > 0.1) {
             Gdx.gl.glClearColor(1, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            int speed = 50;
+
+            TextureRegion currentFrame = run.getKeyFrame(time, true);
+
+            int speed = 25;
             //if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.position.x -= speed * Gdx.graphics.getDeltaTime();
 
             //Camera Default Movement
@@ -83,6 +97,8 @@ public class RunnerScreen extends GameScreen {
             for (ParallaxLayer layer : layers) {
                 layer.render(batch);
             }
+            batch.draw(currentFrame, -100, -350, currentFrame.getRegionWidth() * 2, currentFrame.getRegionHeight() * 2);
+
             batch.end();
 
 
