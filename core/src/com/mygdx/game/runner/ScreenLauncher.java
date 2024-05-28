@@ -10,6 +10,5 @@ public class ScreenLauncher extends Game {
     public void create() {
         setScreen(new IntroScreen(this));
     }
-
 }
 
