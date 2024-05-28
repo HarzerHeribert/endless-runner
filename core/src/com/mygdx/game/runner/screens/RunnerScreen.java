@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.runner.ParallaxLayer;
 
-public class RunnerScreen implements Screen {
+public class RunnerScreen extends GameScreen {
 
     SpriteBatch batch;
     Camera camera;
@@ -22,7 +22,7 @@ public class RunnerScreen implements Screen {
     ParallaxLayer[] layers;
 
     public RunnerScreen(Game game){
-        this.game = game;
+        super(game);
     }
 
     @Override
