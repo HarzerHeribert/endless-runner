@@ -59,7 +59,7 @@ public class RunnerScreen extends GameScreen {
     public void render(float v) {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        int speed = 100;
+        int speed = 50;
         //if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.position.x -= speed * Gdx.graphics.getDeltaTime();
 
         //Camera Default Movement
