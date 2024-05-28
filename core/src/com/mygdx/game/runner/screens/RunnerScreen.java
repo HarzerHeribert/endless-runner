@@ -18,6 +18,16 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public class RunnerScreen extends GameScreen {
 
+    boolean isFalling = false;
+    boolean isJumping = false;
+    private long jumpStartTime = 0;
+    private long fallStartTime = 0;
+    private float startY;
+    private float targetY;
+    private float jumpDuration = 1.0f; // Dauer der Sprungbewegung in Sekunden
+    private float fallDuration = 1.0f; // Dauer der Fallbewegung in Sekunden
+    private float elapsedTime = 0;
+
     boolean isPressed = false;
     long jumpTime = 0;
 
@@ -101,19 +111,33 @@ public class RunnerScreen extends GameScreen {
 
             batch.end();
 
-
-            if (!isPressed) {
+            if (!isJumping && !isFalling) {
                 if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                    isPressed = true;
-                    camera.position.y -= 10;
-                    jumpTime = TimeUtils.nanoTime();
+                    isJumping = true;
+                    startY = camera.position.y;
+                    targetY = startY - 10;
+                    jumpStartTime = TimeUtils.nanoTime();
+                    elapsedTime = 0;
                 }
-            } else {
-                if ((TimeUtils.nanoTime() - jumpTime) > 1000000000) {
-                    System.out.println("Time:" + jumpTime);
-                    camera.position.y += 10;
-                    jumpTime = 0;
-                    isPressed = false;
+            } else if (isJumping) {
+                elapsedTime += Gdx.graphics.getDeltaTime();
+                float progress = Math.min(elapsedTime / jumpDuration, 1) * 2; //Sprunggeschwindigkeit hier anpassen
+                camera.position.y = startY + (targetY - startY) * progress;
+                if (progress >= 1) {
+                    isJumping = false;
+                    isFalling = true;
+                    startY = targetY;
+                    targetY = startY + 10;
+                    elapsedTime = 0;
+                    fallStartTime = TimeUtils.nanoTime();
+                }
+            } else if (isFalling) {
+                elapsedTime += Gdx.graphics.getDeltaTime();
+                float progress = Math.min(elapsedTime / fallDuration, 1) * 2; //Fallgeschwindigkeit hier anpassen
+                camera.position.y = startY + (targetY - startY) * progress;
+                if (progress >= 1) {
+                    isFalling = false;
+                    camera.position.y = targetY;
                 }
             }
         }
