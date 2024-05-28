@@ -107,7 +107,7 @@ public class RunnerScreen extends GameScreen {
                 layer.render(batch);
             }
 
-            batch.draw(currentFrame, camera.position.x -600, -200, currentFrame.getRegionWidth() * 4, currentFrame.getRegionHeight() * 4);
+            batch.draw(currentFrame, camera.position.x -650, -200, currentFrame.getRegionWidth() * 4, currentFrame.getRegionHeight() * 4);
 
             batch.end();
 
